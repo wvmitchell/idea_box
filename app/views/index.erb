@@ -12,5 +12,13 @@
       <textarea name='idea_description'></textarea><br />
       <input type='submit' value='SAVE'>
     </form>
+    <h3>Existing Ideas</h3>
+    <ul>
+      <% ideas.each do |idea| %>
+        <li>
+          <%= idea.title %>
+          <%= idea.description %>
+        </li>
+      <% end %>
   </body>
 </html>

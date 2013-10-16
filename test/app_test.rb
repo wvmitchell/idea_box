@@ -18,4 +18,15 @@ class IdeaBoxAppTest < MiniTest::Test
     assert last_response.ok?, "It's not ok"
   end
 
+  def test_it_posts_without_error
+    post '/', {idea_name: 'Pizza', idea_description: 'I love it'}
+    follow_redirect!
+    assert last_response.ok?, "It's not ok"
+  end
+
+  def test_it_deletes_without_error
+    delete '/', {id: 1}
+    follow_redirect!
+    assert last_response.ok?, "It's not ok"
+  end
 end

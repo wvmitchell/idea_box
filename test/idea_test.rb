@@ -42,4 +42,21 @@ class IdeaTest < MiniTest::Test
     assert_kind_of Array, Idea.all
   end
 
+  def test_it_has_singleton_method_delete
+    assert Idea.singleton_methods.include? :delete
+  end
+
+  def test_it_has_singleton_method_find
+    assert Idea.singleton_methods.include? :find
+  end
+
+  def test_singleton_method_find_returns_an_idea
+    idea = Idea.find(0)
+    assert_kind_of Idea, idea
+  end
+
+  def test_it_has_singleton_method_update
+    assert Idea.singleton_methods.include? :update
+  end
+
 end

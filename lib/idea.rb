@@ -27,6 +27,19 @@ class Idea
     end
   end
 
+  def self.find(position)
+    idea_hash = database.transaction do
+      database['ideas'].at(position.to_i)
+    end
+    new(idea_hash[:title], idea_hash[:description])
+  end
+
+  def self.update(position, data)
+    database.transaction do
+      database['ideas'][position.to_i]=data
+    end
+  end
+
   def save
     database.transaction do |db|
       db['ideas'] ||= []

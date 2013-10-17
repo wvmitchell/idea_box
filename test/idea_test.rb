@@ -8,55 +8,11 @@ class IdeaTest < MiniTest::Test
   attr_reader :idea
 
   def setup
-    @idea = Idea.new('floss', 'try flossing every day')
+    @idea = Idea.new({title: 'floss', description: 'try flossing every day'})
   end
 
   def test_it_exist
     assert_kind_of Idea, idea
-  end
-
-  def test_it_has_save_method
-    assert idea.methods.include? :save
-  end
-
-  def test_it_has_database_method
-    assert Idea.singleton_methods.include? :database
-  end
-
-  def test_it_is_a_type_of_db
-    assert_kind_of YAML::Store, Idea.database
-  end
-
-  def test_it_stores_new_ideas_to_the_database
-    idea.save
-    idea_hash = idea.database.transaction {idea.database['ideas']}.last
-    assert_equal  'floss', idea_hash[:title]
-    assert_equal 'try flossing every day', idea_hash[:description]
-  end
-
-  def test_is_has_singleton_method_all
-    assert Idea.singleton_methods.include? :all
-  end
-
-  def test_all_returns_an_array
-    assert_kind_of Array, Idea.all
-  end
-
-  def test_it_has_singleton_method_delete
-    assert Idea.singleton_methods.include? :delete
-  end
-
-  def test_it_has_singleton_method_find
-    assert Idea.singleton_methods.include? :find
-  end
-
-  def test_singleton_method_find_returns_an_idea
-    idea = Idea.find(0)
-    assert_kind_of Idea, idea
-  end
-
-  def test_it_has_singleton_method_update
-    assert Idea.singleton_methods.include? :update
   end
 
 end

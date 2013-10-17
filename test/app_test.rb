@@ -19,7 +19,7 @@ class IdeaBoxAppTest < MiniTest::Test
   end
 
   def test_it_posts_without_error
-    post '/', {idea_name: 'Pizza', idea_description: 'I love it'}
+    post '/', {idea: {title: 'Pizza', description: 'I love it'}}
     follow_redirect!
     assert last_response.ok?, "It's not ok"
   end

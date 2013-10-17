@@ -1,17 +1,18 @@
+require_relative "./idea"
 require 'yaml/store'
 
-class Idea
+class IdeaStore
 
-  attr_reader :title, :description
-
-  def initialize(title=nil, description=nil)
-    @title = title
-    @description = description
+  def self.create(attributes)
+    database.transaction do |db|
+      db['ideas'] ||= []
+      db['ideas'] << attributes
+    end
   end
 
   def self.all
     raw_ideas.map do |data|
-      new(data[:title], data[:description])
+      Idea.new(data)
     end
   end
 
@@ -31,7 +32,7 @@ class Idea
     idea_hash = database.transaction do
       database['ideas'].at(position.to_i)
     end
-    new(idea_hash[:title], idea_hash[:description])
+    Idea.new(idea_hash)
   end
 
   def self.update(position, data)
@@ -40,19 +41,8 @@ class Idea
     end
   end
 
-  def save
-    database.transaction do |db|
-      db['ideas'] ||= []
-      db['ideas'] << {title: title, description: description}
-    end
-  end
-
   def self.database
-    @database ||= YAML::Store.new 'ideabox'
-  end
-
-  def database
-    Idea.database
+    @database ||= YAML::Store.new 'db/ideabox'
   end
 
 end

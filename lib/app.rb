@@ -1,9 +1,10 @@
 require 'sinatra'
-require './lib/idea'
+require 'ideabox'
 
 class IdeaBoxApp < Sinatra::Base
 
   set :method_override, true
+  set :root, 'lib/app'
 
   configure :development do
     register Sinatra::Reloader
@@ -14,33 +15,26 @@ class IdeaBoxApp < Sinatra::Base
   end
 
   get '/' do
-    erb :index, locals: {ideas: Idea.all}
+    erb :index, locals: {ideas: IdeaStore.all, idea: Idea.new}
   end
 
   post '/' do
     # 1. Create an idea based on the form params
-    idea = Idea.new(params[:idea_name], params[:idea_description])
-    # 2. Store it
-    idea.save
-    # 3. Redirect to the index page to see all the ideas
+    IdeaStore.create(params[:idea])
     redirect '/'
   end
 
   delete '/:id' do |id|
-    Idea.delete(id)
+    IdeaStore.delete(id)
     redirect '/'
   end
 
   get '/:id/edit' do |id|
-    erb :edit, locals: {id: id, idea: Idea.find(id)}
+    erb :edit, locals: {id: id, idea: IdeaStore.find(id)}
   end
 
   put '/:id' do |id|
-    data = {
-      title: params[:idea_title],
-      description: params[:idea_description]
-    }
-    Idea.update(id, data)
+    IdeaStore.update(id, params[:idea])
     redirect '/'
   end
 end
